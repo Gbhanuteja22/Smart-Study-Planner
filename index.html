@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Study Planner</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-graduation-cap"></i>
+                <span>Smart Study Planner</span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#home" class="nav-link active" data-section="home">
+                        <i class="fas fa-home"></i> Home
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#tasks" class="nav-link" data-section="tasks">
+                        <i class="fas fa-tasks"></i> Tasks
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#progress" class="nav-link" data-section="progress">
+                        <i class="fas fa-chart-pie"></i> Progress
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#about" class="nav-link" data-section="about">
+                        <i class="fas fa-info-circle"></i> About
+                    </a>
+                </li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+    <main class="main-content">
+        <section id="home" class="section active">
+            <div class="container">
+                <div class="hero-section">
+                    <h1>Welcome to Smart Study Planner</h1>
+                    <p>Organize your studies, track progress, and achieve your academic goals!</p>
+                </div>
+                <div class="quick-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-clipboard-list"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="total-tasks">0</h3>
+                            <p>Total Tasks</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="completed-tasks">0</h3>
+                            <p>Completed</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="pending-tasks">0</h3>
+                            <p>Pending</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="overdue-tasks">0</h3>
+                            <p>Overdue</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="add-task-section">
+                    <h2>Add New Study Task</h2>
+                    <form id="task-form" class="task-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="subject">Subject/Topic</label>
+                                <input type="text" id="subject" name="subject" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="priority">Priority</label>
+                                <select id="priority" name="priority" required>
+                                    <option value="low">Low</option>
+                                    <option value="medium" selected>Medium</option>
+                                    <option value="high">High</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Task Description</label>
+                            <textarea id="description" name="description" rows="3" required></textarea>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="due-date">Due Date</label>
+                                <input type="date" id="due-date" name="due-date" required>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-plus"></i> Add Task
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="recent-tasks">
+                    <h2>Recent Tasks</h2>
+                    <div id="recent-tasks-list" class="tasks-preview"></div>
+                    <div class="view-all-tasks">
+                        <button class="btn btn-outline" onclick="studyPlanner.showSection('tasks')">
+                            View All Tasks <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="tasks" class="section">
+            <div class="container">
+                <h1>Your Study Tasks</h1>
+                <div class="task-filters">
+                    <button class="filter-btn active" data-filter="all">All Tasks</button>
+                    <button class="filter-btn" data-filter="pending">Pending</button>
+                    <button class="filter-btn" data-filter="completed">Completed</button>
+                    <button class="filter-btn" data-filter="overdue">Overdue</button>
+                </div>
+                <div id="tasks-container" class="tasks-container"></div>
+            </div>
+        </section>
+        <section id="progress" class="section">
+            <div class="container">
+                <h1>Progress Tracking</h1>
+                <div class="progress-overview">
+                    <div class="progress-card">
+                        <h3>Overall Progress</h3>
+                        <div class="progress-circle">
+                            <svg viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="45" class="progress-bg"></circle>
+                                <circle cx="50" cy="50" r="45" class="progress-fill" id="progress-circle"></circle>
+                            </svg>
+                            <div class="progress-text">
+                                <span id="progress-percentage">0%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Total Tasks:</span>
+                            <span class="stat-value" id="stat-total">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Completed:</span>
+                            <span class="stat-value" id="stat-completed">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Pending:</span>
+                            <span class="stat-value" id="stat-pending">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Overdue:</span>
+                            <span class="stat-value" id="stat-overdue">0</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="timeline-section">
+                    <h3>Task Timeline</h3>
+                    <div id="timeline-container" class="timeline-container"></div>
+                </div>
+                <div class="subject-progress-section">
+                    <h3>Subject-wise Progress</h3>
+                    <div id="subject-progress-container" class="subject-progress-container"></div>
+                </div>
+            </div>
+        </section>
+        <section id="about" class="section">
+            <div class="container">
+                <h1>About Smart Study Planner</h1>
+                <div class="about-content">
+                    <div class="about-card">
+                        <div class="about-icon">
+                            <i class="fas fa-target"></i>
+                        </div>
+                        <h3>Our Mission</h3>
+                        <p>To help students organize their studies effectively and achieve their academic goals through smart planning and progress tracking.</p>
+                    </div>
+                    <div class="about-card">
+                        <div class="about-icon">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <h3>Features</h3>
+                        <ul>
+                            <li>Task Management with Priorities</li>
+                            <li>Progress Tracking & Analytics</li>
+                            <li>Timeline Visualization</li>
+                            <li>Local Data Storage</li>
+                            <li>Responsive Design</li>
+                        </ul>
+                    </div>
+                    <div class="about-card">
+                        <div class="about-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h3>Technology</h3>
+                        <p>Built with pure HTML, CSS, and JavaScript. All data is stored locally in your browser for privacy and offline access.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Smart Study Planner</h4>
+                    <p>Your companion for academic success.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#tasks">Tasks</a></li>
+                        <li><a href="#progress">Progress</a></li>
+                        <li><a href="#about">About</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <p>Built with ❤️ for students everywhere</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Smart Study Planner. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Edit Task</h2>
+            <form id="edit-task-form" class="task-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="edit-subject">Subject/Topic</label>
+                        <input type="text" id="edit-subject" name="subject" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-priority">Priority</label>
+                        <select id="edit-priority" name="priority" required>
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="edit-description">Task Description</label>
+                    <textarea id="edit-description" name="description" rows="3" required></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="edit-due-date">Due Date</label>
+                        <input type="date" id="edit-due-date" name="due-date" required>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Update Task
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="notification-container" class="notification-container"></div>
+    <script src="script.js"></script>
+</body>
+</html>
